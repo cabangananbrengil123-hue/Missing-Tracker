@@ -23,7 +23,7 @@
         /* Centered Container Div */
         .main-container {
             width: 90%;
-            max-width: 900px;
+            max-width: 950px;
             margin: 0 auto;
             text-align: center;
         }
@@ -96,9 +96,25 @@
             text-align: center;
         }
 
-        .btn {
+        /* Action Buttons Fixed Equal Size */
+        .btn-action {
+            width: 55px;
+            height: 24px;
+            font-size: 11px;
+            padding: 0;
+            cursor: pointer;
+            background-color: #e0e0e0;
+            border: 1px solid #000000;
+            box-sizing: border-box;
+            display: inline-block;
+            text-align: center;
+            line-height: 22px;
+            margin: 1px;
+        }
+
+        .btn-form {
             font-size: 12px;
-            padding: 2px 6px;
+            padding: 2px 8px;
             cursor: pointer;
             background-color: #e0e0e0;
             border: 1px solid #000000;
@@ -123,8 +139,9 @@
             <b>System Status:</b> Active | Public Registry Mode | Google Search Indexing Enabled
         </div>
 
-        <h2>New Case Entry</h2>
+        <h2 id="form-heading">New Case Entry</h2>
         <form id="case-form">
+            <input type="hidden" id="edit-index" value="-1">
             <table class="form-table">
                 <tr>
                     <td><label for="case-id">Case ID:*</label></td>
@@ -166,8 +183,8 @@
                 <tr>
                     <td></td>
                     <td colspan="3">
-                        <input type="submit" value="Save Record" class="btn">
-                        <input type="reset" value="Reset Form" class="btn">
+                        <input type="submit" id="submit-btn" value="Save Record" class="btn-form">
+                        <input type="button" id="cancel-btn" value="Reset Form" class="btn-form" onclick="resetFormState()">
                     </td>
                 </tr>
             </table>
@@ -204,7 +221,7 @@
                     <th>Timestamp</th>
                     <th>Details</th>
                     <th>Status</th>
-                    <th>Action</th>
+                    <th style="width: 125px;">Action</th>
                 </tr>
             </thead>
             <tbody id="records-tbody">
@@ -225,7 +242,6 @@
         window.onload = function() {
             loadRecords();
             if (cases.length === 0) {
-                // Initial baseline entry
                 cases = [
                     {
                         id: "FC-001",
@@ -245,7 +261,9 @@
         caseForm.onsubmit = function(e) {
             e.preventDefault();
 
-            var newCase = {
+            var editIdx = parseInt(document.getElementById('edit-index').value, 10);
+
+            var caseData = {
                 id: document.getElementById('case-id').value,
                 category: document.getElementById('category').value,
                 title: document.getElementById('title').value,
@@ -255,11 +273,42 @@
                 details: document.getElementById('details').value
             };
 
-            cases.push(newCase);
+            if (editIdx >= 0 && editIdx < cases.length) {
+                cases[editIdx] = caseData;
+            } else {
+                cases.push(caseData);
+            }
+
             saveRecords();
             renderTable();
-            caseForm.reset();
+            resetFormState();
         };
+
+        function editRecord(index) {
+            var item = cases[index];
+            document.getElementById('edit-index').value = index;
+            document.getElementById('case-id').value = item.id;
+            document.getElementById('category').value = item.category;
+            document.getElementById('title').value = item.title;
+            document.getElementById('location').value = item.location;
+            document.getElementById('timestamp').value = item.timestamp;
+            document.getElementById('status').value = item.status;
+            document.getElementById('details').value = item.details || '';
+
+            document.getElementById('form-heading').innerHTML = 'Edit Case Entry (' + item.id + ')';
+            document.getElementById('submit-btn').value = 'Update Record';
+            document.getElementById('cancel-btn').value = 'Cancel Edit';
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function resetFormState() {
+            document.getElementById('edit-index').value = "-1";
+            caseForm.reset();
+            document.getElementById('form-heading').innerHTML = 'New Case Entry';
+            document.getElementById('submit-btn').value = 'Save Record';
+            document.getElementById('cancel-btn').value = 'Reset Form';
+        }
 
         function renderTable() {
             tbody.innerHTML = '';
@@ -298,7 +347,10 @@
                     '<td>' + escapeHTML(item.timestamp) + '</td>' +
                     '<td>' + escapeHTML(item.details || '-') + '</td>' +
                     '<td>' + escapeHTML(item.status) + '</td>' +
-                    '<td><button class="btn" onclick="deleteRecord(' + originalIndex + ')">Delete</button></td>';
+                    '<td style="text-align: center;">' +
+                        '<button class="btn-action" onclick="editRecord(' + originalIndex + ')">Edit</button>' +
+                        '<button class="btn-action" onclick="deleteRecord(' + originalIndex + ')">Delete</button>' +
+                    '</td>';
 
                 tbody.appendChild(tr);
             }
@@ -309,6 +361,9 @@
                 cases.splice(index, 1);
                 saveRecords();
                 renderTable();
+                if (parseInt(document.getElementById('edit-index').value, 10) === index) {
+                    resetFormState();
+                }
             }
         }
 
