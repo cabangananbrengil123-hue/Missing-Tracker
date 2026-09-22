@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- SEO Meta Tags -->
+    <title>b.s.3.m.a project - File Case Database</title>
+    <meta name="title" content="b.s.3.m.a project - File Case Database">
+    <meta name="description" content="Official file case database record system for b.s.3.m.a project.">
+    <meta name="keywords" content="b.s.3.m.a project, bs3ma project, File Case Database">
+    <meta name="robots" content="index, follow">
+
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 20px;
+            background-color: #ffffff;
+            color: #000000;
+        }
+
+        h1, h2 {
+            font-family: "Times New Roman", Times, serif;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        hr {
+            border: 0;
+            border-top: 1px solid #000000;
+            margin: 15px 0;
+        }
+
+        .status-box {
+            border: 1px solid #000000;
+            padding: 5px;
+            margin-bottom: 15px;
+            font-size: 12px;
+        }
+
+        table.form-table {
+            border: none;
+            margin-bottom: 15px;
+        }
+
+        table.form-table td {
+            padding: 4px;
+            border: none;
+            vertical-align: top;
+            font-size: 12px;
+        }
+
+        input[type="text"], input[type="datetime-local"], select, textarea {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 12px;
+            padding: 2px;
+            border: 1px solid #000000;
+        }
+
+        textarea {
+            width: 300px;
+            height: 40px;
+        }
+
+        .filter-section {
+            margin-bottom: 10px;
+            font-size: 12px;
+        }
+
+        table.data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        table.data-table th, table.data-table td {
+            border: 1px solid #000000;
+            padding: 4px;
+            font-size: 12px;
+            text-align: left;
+        }
+
+        table.data-table th {
+            background-color: #f0f0f0;
+        }
+
+        .btn {
+            font-size: 12px;
+            padding: 2px 6px;
+            cursor: pointer;
+            background-color: #e0e0e0;
+            border: 1px solid #000000;
+        }
+
+        .count-text {
+            font-size: 12px;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>b.s.3.m.a project</h1>
+    <div style="font-size: 14px; font-weight: bold;">File Case Database System</div>
+    <hr>
+
+    <div class="status-box">
+        <b>System Status:</b> Active | Public Registry Mode | Google Search Indexing Enabled
+    </div>
+
+    <h2>New Case Entry</h2>
+    <form id="case-form">
+        <table class="form-table">
+            <tr>
+                <td><label for="case-id">Case ID:*</label></td>
+                <td><input type="text" id="case-id" required placeholder="e.g. FC-1001"></td>
+                <td><label for="category">Category:*</label></td>
+                <td>
+                    <select id="category" required>
+                        <option value="">-- Select --</option>
+                        <option value="Missing Person">Missing Person</option>
+                        <option value="Vehicle">Vehicle</option>
+                        <option value="Property">Property</option>
+                        <option value="Animal/Pet">Animal/Pet</option>
+                        <option value="General Record">General Record</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="title">Case Title / Name:*</label></td>
+                <td><input type="text" id="title" required></td>
+                <td><label for="location">Location:*</label></td>
+                <td><input type="text" id="location" required></td>
+            </tr>
+            <tr>
+                <td><label for="timestamp">Timestamp:*</label></td>
+                <td><input type="datetime-local" id="timestamp" required></td>
+                <td><label for="status">Status:*</label></td>
+                <td>
+                    <select id="status">
+                        <option value="Open">Open</option>
+                        <option value="Under Review">Under Review</option>
+                        <option value="Closed">Closed</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="details">Details / Notes:</label></td>
+                <td colspan="3"><textarea id="details"></textarea></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td colspan="3">
+                    <input type="submit" value="Save Record" class="btn">
+                    <input type="reset" value="Reset Form" class="btn">
+                </td>
+            </tr>
+        </table>
+    </form>
+
+    <hr>
+
+    <h2>Database Records</h2>
+    
+    <div class="filter-section">
+        <label for="search-box">Search:</label>
+        <input type="text" id="search-box" placeholder="Filter records..." onkeyup="renderTable()">
+        
+        <label for="filter-category" style="margin-left: 10px;">Category:</label>
+        <select id="filter-category" onchange="renderTable()">
+            <option value="">All</option>
+            <option value="Missing Person">Missing Person</option>
+            <option value="Vehicle">Vehicle</option>
+            <option value="Property">Property</option>
+            <option value="Animal/Pet">Animal/Pet</option>
+            <option value="General Record">General Record</option>
+        </select>
+    </div>
+
+    <div class="count-text" id="record-count">Records found: 0</div>
+
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>Case ID</th>
+                <th>Category</th>
+                <th>Title / Name</th>
+                <th>Location</th>
+                <th>Timestamp</th>
+                <th>Details</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="records-tbody">
+            <tr>
+                <td colspan="8">No records loaded.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <script>
+        var cases = [];
+        var caseForm = document.getElementById('case-form');
+        var tbody = document.getElementById('records-tbody');
+        var recordCountText = document.getElementById('record-count');
+
+        window.onload = function() {
+            loadRecords();
+            if (cases.length === 0) {
+                // Initial baseline entry
+                cases = [
+                    {
+                        id: "FC-001",
+                        category: "General Record",
+                        title: "Initial System Setup",
+                        location: "Central Registry",
+                        timestamp: "2026-09-22T09:00",
+                        status: "Open",
+                        details: "b.s.3.m.a project file case database initialized."
+                    }
+                ];
+                saveRecords();
+            }
+            renderTable();
+        };
+
+        caseForm.onsubmit = function(e) {
+            e.preventDefault();
+
+            var newCase = {
+                id: document.getElementById('case-id').value,
+                category: document.getElementById('category').value,
+                title: document.getElementById('title').value,
+                location: document.getElementById('location').value,
+                timestamp: document.getElementById('timestamp').value,
+                status: document.getElementById('status').value,
+                details: document.getElementById('details').value
+            };
+
+            cases.push(newCase);
+            saveRecords();
+            renderTable();
+            caseForm.reset();
+        };
+
+        function renderTable() {
+            tbody.innerHTML = '';
+
+            var searchQuery = document.getElementById('search-box').value.toLowerCase();
+            var categoryFilter = document.getElementById('filter-category').value;
+
+            var filteredCases = cases.filter(function(item) {
+                var matchesSearch = (
+                    item.id.toLowerCase().indexOf(searchQuery) !== -1 ||
+                    item.title.toLowerCase().indexOf(searchQuery) !== -1 ||
+                    item.location.toLowerCase().indexOf(searchQuery) !== -1 ||
+                    item.details.toLowerCase().indexOf(searchQuery) !== -1
+                );
+                var matchesCategory = categoryFilter === '' || item.category === categoryFilter;
+                return matchesSearch && matchesCategory;
+            });
+
+            recordCountText.innerHTML = 'Records found: ' + filteredCases.length;
+
+            if (filteredCases.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8">No matching records found.</td></tr>';
+                return;
+            }
+
+            for (var i = 0; i < filteredCases.length; i++) {
+                var item = filteredCases[i];
+                var originalIndex = cases.indexOf(item);
+                var tr = document.createElement('tr');
+
+                tr.innerHTML = 
+                    '<td>' + escapeHTML(item.id) + '</td>' +
+                    '<td>' + escapeHTML(item.category) + '</td>' +
+                    '<td>' + escapeHTML(item.title) + '</td>' +
+                    '<td>' + escapeHTML(item.location) + '</td>' +
+                    '<td>' + escapeHTML(item.timestamp) + '</td>' +
+                    '<td>' + escapeHTML(item.details || '-') + '</td>' +
+                    '<td>' + escapeHTML(item.status) + '</td>' +
+                    '<td><button class="btn" onclick="deleteRecord(' + originalIndex + ')">Delete</button></td>';
+
+                tbody.appendChild(tr);
+            }
+        }
+
+        function deleteRecord(index) {
+            if (confirm('Delete record ' + cases[index].id + '?')) {
+                cases.splice(index, 1);
+                saveRecords();
+                renderTable();
+            }
+        }
+
+        function saveRecords() {
+            localStorage.setItem('bs3ma_file_cases', JSON.stringify(cases));
+        }
+
+        function loadRecords() {
+            var stored = localStorage.getItem('bs3ma_file_cases');
+            if (stored) {
+                try {
+                    cases = JSON.parse(stored);
+                } catch (e) {
+                    cases = [];
+                }
+            }
+        }
+
+        function escapeHTML(str) {
+            if (!str) return '';
+            return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        }
+    </script>
+</body>
+</html>
