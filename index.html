@@ -14,9 +14,18 @@
     <style>
         body {
             font-family: Arial, Helvetica, sans-serif;
-            margin: 20px;
+            margin: 0;
+            padding: 20px 0;
             background-color: #ffffff;
             color: #000000;
+        }
+
+        /* Centered Container Div */
+        .main-container {
+            width: 90%;
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
         }
 
         h1, h2 {
@@ -34,13 +43,15 @@
         .status-box {
             border: 1px solid #000000;
             padding: 5px;
-            margin-bottom: 15px;
+            margin: 0 auto 15px auto;
             font-size: 12px;
+            display: inline-block;
         }
 
         table.form-table {
             border: none;
-            margin-bottom: 15px;
+            margin: 0 auto 15px auto;
+            text-align: left;
         }
 
         table.form-table td {
@@ -82,6 +93,7 @@
 
         table.data-table th {
             background-color: #f0f0f0;
+            text-align: center;
         }
 
         .btn {
@@ -100,104 +112,109 @@
 </head>
 <body>
 
-    <h1>b.s.3.m.a project</h1>
-    <div style="font-size: 14px; font-weight: bold;">File Case Database System</div>
-    <hr>
+    <!-- Centered Div Container -->
+    <div class="main-container">
 
-    <div class="status-box">
-        <b>System Status:</b> Active | Public Registry Mode | Google Search Indexing Enabled
-    </div>
+        <h1>b.s.3.m.a project</h1>
+        <div style="font-size: 14px; font-weight: bold;">File Case Database System</div>
+        <hr>
 
-    <h2>New Case Entry</h2>
-    <form id="case-form">
-        <table class="form-table">
-            <tr>
-                <td><label for="case-id">Case ID:*</label></td>
-                <td><input type="text" id="case-id" required placeholder="e.g. FC-1001"></td>
-                <td><label for="category">Category:*</label></td>
-                <td>
-                    <select id="category" required>
-                        <option value="">-- Select --</option>
-                        <option value="Missing Person">Missing Person</option>
-                        <option value="Vehicle">Vehicle</option>
-                        <option value="Property">Property</option>
-                        <option value="Animal/Pet">Animal/Pet</option>
-                        <option value="General Record">General Record</option>
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td><label for="title">Case Title / Name:*</label></td>
-                <td><input type="text" id="title" required></td>
-                <td><label for="location">Location:*</label></td>
-                <td><input type="text" id="location" required></td>
-            </tr>
-            <tr>
-                <td><label for="timestamp">Timestamp:*</label></td>
-                <td><input type="datetime-local" id="timestamp" required></td>
-                <td><label for="status">Status:*</label></td>
-                <td>
-                    <select id="status">
-                        <option value="Open">Open</option>
-                        <option value="Under Review">Under Review</option>
-                        <option value="Closed">Closed</option>
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td><label for="details">Details / Notes:</label></td>
-                <td colspan="3"><textarea id="details"></textarea></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td colspan="3">
-                    <input type="submit" value="Save Record" class="btn">
-                    <input type="reset" value="Reset Form" class="btn">
-                </td>
-            </tr>
-        </table>
-    </form>
+        <div class="status-box">
+            <b>System Status:</b> Active | Public Registry Mode | Google Search Indexing Enabled
+        </div>
 
-    <hr>
+        <h2>New Case Entry</h2>
+        <form id="case-form">
+            <table class="form-table">
+                <tr>
+                    <td><label for="case-id">Case ID:*</label></td>
+                    <td><input type="text" id="case-id" required placeholder="e.g. FC-1001"></td>
+                    <td><label for="category">Category:*</label></td>
+                    <td>
+                        <select id="category" required>
+                            <option value="">-- Select --</option>
+                            <option value="Missing Person">Missing Person</option>
+                            <option value="Vehicle">Vehicle</option>
+                            <option value="Property">Property</option>
+                            <option value="Animal/Pet">Animal/Pet</option>
+                            <option value="General Record">General Record</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label for="title">Case Title / Name:*</label></td>
+                    <td><input type="text" id="title" required></td>
+                    <td><label for="location">Location:*</label></td>
+                    <td><input type="text" id="location" required></td>
+                </tr>
+                <tr>
+                    <td><label for="timestamp">Timestamp:*</label></td>
+                    <td><input type="datetime-local" id="timestamp" required></td>
+                    <td><label for="status">Status:*</label></td>
+                    <td>
+                        <select id="status">
+                            <option value="Open">Open</option>
+                            <option value="Under Review">Under Review</option>
+                            <option value="Closed">Closed</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label for="details">Details / Notes:</label></td>
+                    <td colspan="3"><textarea id="details"></textarea></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td colspan="3">
+                        <input type="submit" value="Save Record" class="btn">
+                        <input type="reset" value="Reset Form" class="btn">
+                    </td>
+                </tr>
+            </table>
+        </form>
 
-    <h2>Database Records</h2>
-    
-    <div class="filter-section">
-        <label for="search-box">Search:</label>
-        <input type="text" id="search-box" placeholder="Filter records..." onkeyup="renderTable()">
+        <hr>
+
+        <h2>Database Records</h2>
         
-        <label for="filter-category" style="margin-left: 10px;">Category:</label>
-        <select id="filter-category" onchange="renderTable()">
-            <option value="">All</option>
-            <option value="Missing Person">Missing Person</option>
-            <option value="Vehicle">Vehicle</option>
-            <option value="Property">Property</option>
-            <option value="Animal/Pet">Animal/Pet</option>
-            <option value="General Record">General Record</option>
-        </select>
+        <div class="filter-section">
+            <label for="search-box">Search:</label>
+            <input type="text" id="search-box" placeholder="Filter records..." onkeyup="renderTable()">
+            
+            <label for="filter-category" style="margin-left: 10px;">Category:</label>
+            <select id="filter-category" onchange="renderTable()">
+                <option value="">All</option>
+                <option value="Missing Person">Missing Person</option>
+                <option value="Vehicle">Vehicle</option>
+                <option value="Property">Property</option>
+                <option value="Animal/Pet">Animal/Pet</option>
+                <option value="General Record">General Record</option>
+            </select>
+        </div>
+
+        <div class="count-text" id="record-count">Records found: 0</div>
+
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Case ID</th>
+                    <th>Category</th>
+                    <th>Title / Name</th>
+                    <th>Location</th>
+                    <th>Timestamp</th>
+                    <th>Details</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="records-tbody">
+                <tr>
+                    <td colspan="8">No records loaded.</td>
+                </tr>
+            </tbody>
+        </table>
+
     </div>
-
-    <div class="count-text" id="record-count">Records found: 0</div>
-
-    <table class="data-table">
-        <thead>
-            <tr>
-                <th>Case ID</th>
-                <th>Category</th>
-                <th>Title / Name</th>
-                <th>Location</th>
-                <th>Timestamp</th>
-                <th>Details</th>
-                <th>Status</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody id="records-tbody">
-            <tr>
-                <td colspan="8">No records loaded.</td>
-            </tr>
-        </tbody>
-    </table>
 
     <script>
         var cases = [];
